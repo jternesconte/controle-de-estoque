@@ -1,5 +1,6 @@
 package com.example.controle_de_estoque.models.entities;
 
+import com.example.controle_de_estoque.utils.BooleanToStringConverter;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,13 +17,18 @@ public class Categoria {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
+    @Convert(converter = BooleanToStringConverter.class)
+    @Column(name = "fl_ativo", nullable = false)
+    private boolean flAtivo;
+
     public Categoria() {
 
     }
 
-    public Categoria(String descricao, String nome) {
-        this.descricao = descricao;
+    public Categoria(String nome, String descricao, boolean flAtivo) {
         this.nome = nome;
+        this.descricao = descricao;
+        this.flAtivo = flAtivo;
     }
 
     public int getId() {
@@ -47,5 +53,13 @@ public class Categoria {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public boolean isFlAtivo() {
+        return flAtivo;
+    }
+
+    public void setFlAtivo(boolean flAtivo) {
+        this.flAtivo = flAtivo;
     }
 }

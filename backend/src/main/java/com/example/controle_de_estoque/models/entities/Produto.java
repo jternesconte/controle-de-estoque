@@ -1,5 +1,6 @@
 package com.example.controle_de_estoque.models.entities;
 
+import com.example.controle_de_estoque.utils.BooleanToStringConverter;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -28,16 +29,22 @@ public class Produto {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoriaId;
 
+    @Convert(converter = BooleanToStringConverter.class)
+    @Column(name = "fl_ativo", nullable = false)
+    private Boolean flAtivo;
+
+
     public Produto() {
 
     }
 
-    public Produto(String nome, String descricao, BigDecimal preco, int quantidade, Categoria categoria_id) {
+    public Produto(String nome, String descricao, BigDecimal preco, int quantidade, Categoria categoriaId, Boolean flAtivo) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.quantidade = quantidade;
-        this.categoriaId = categoria_id;
+        this.categoriaId = categoriaId;
+        this.flAtivo = flAtivo;
     }
 
     public int getId() {
@@ -48,11 +55,11 @@ public class Produto {
         this.id = id;
     }
 
-    public String getNmProduto() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNmProduto(String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -64,11 +71,11 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public BigDecimal getVlProduto() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setVlProduto(BigDecimal preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 
@@ -80,11 +87,19 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
-    public Categoria getCategoria() {
+    public Categoria getCategoriaId() {
         return categoriaId;
     }
 
-    public void setCategoria(Categoria categoria_id) {
+    public void setCategoriaId(Categoria categoriaId) {
         this.categoriaId = categoriaId;
+    }
+
+    public Boolean getFlAtivo() {
+        return flAtivo;
+    }
+
+    public void setFlAtivo(Boolean flAtivo) {
+        this.flAtivo = flAtivo;
     }
 }
