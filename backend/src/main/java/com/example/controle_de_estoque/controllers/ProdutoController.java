@@ -6,14 +6,12 @@ import com.example.controle_de_estoque.models.repositories.CategoriaRepository;
 import com.example.controle_de_estoque.models.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/api/produto")
+@Controller
 public class ProdutoController {
 
     @Autowired
@@ -22,42 +20,38 @@ public class ProdutoController {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    @PostMapping("/adicionarProduto/{categoriaId}")
-    public Produto novoProduto(@RequestParam String nome,
-                                             @RequestParam String descricao,
-                                             @RequestParam BigDecimal preco,
-                                             @RequestParam int quantidade,
-                                             @PathVariable int categoriaId) {
+    public Produto novoProduto(int categoriaId, Produto produtoDetalhes) {
 
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-        Produto produto = new Produto(nome, descricao, preco,
-                quantidade, categoria, true);
+        Produto produto = new Produto(
+                produtoDetalhes.getNome(),
+                produtoDetalhes.getDescricao(),
+                produtoDetalhes.getPreco(),
+                produtoDetalhes.getQuantidade(),
+                categoria,
+                true
+        );
 
-        produtoRepository.save(produto);
-        return produto;
+        return produtoRepository.save(produto);
     }
 
-    @GetMapping("/getAllProdutos")
-    public @ResponseBody List<Produto> getProdutos() {
+    public List<Produto> getAllProdutos() {
         return (List<Produto>) produtoRepository.findAll();
     }
 
-    @GetMapping("/getProdutos/ativos")
-    public @ResponseBody List<Produto> getAtivos() {
+    public List<Produto> getAtivos() {
         List<Produto> produtosAtivos = produtoRepository.findByflAtivoTrue();
         return ResponseEntity.ok(produtosAtivos).getBody();
     }
 
-    @GetMapping("/getProdutos/inativos")
-    public @ResponseBody List<Produto> getInativos() {
+    public List<Produto> getInativos() {
         List<Produto> produtosInativos = produtoRepository.findByflAtivoFalse();
         return ResponseEntity.ok(produtosInativos).getBody();
     }
 
-    @PutMapping("alterarItem/{id}")
-    public Produto editarProduto(@PathVariable int id, Produto produtoDetalhes) {
+    public Produto editarProduto(int id, Produto produtoDetalhes, int categoriaId) {
      Optional<Produto> optionalProduto = produtoRepository.findById(id);
 
      if(optionalProduto.isPresent()) {
@@ -66,8 +60,15 @@ public class ProdutoController {
          produtoExistente.setDescricao(produtoDetalhes.getDescricao());
          produtoExistente.setPreco(produtoDetalhes.getPreco());
          produtoExistente.setQuantidade(produtoDetalhes.getQuantidade());
-         produtoExistente.setCategoriaId(produtoDetalhes.getCategoriaId());
          produtoExistente.setFlAtivo(produtoDetalhes.getFlAtivo());
+
+         Optional<Categoria> optionalCategoria = categoriaRepository.findById(categoriaId);
+
+         if(optionalCategoria.isPresent()) {
+             produtoExistente.setCategoriaId(optionalCategoria.get());
+         } else {
+             throw new RuntimeException("Categoria não encontrada com o id: " + produtoDetalhes.getCategoriaId());
+         }
 
          return produtoRepository.save(produtoExistente);
      } else {
