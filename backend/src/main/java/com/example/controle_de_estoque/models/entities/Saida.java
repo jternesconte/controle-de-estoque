@@ -3,7 +3,7 @@ package com.example.controle_de_estoque.models.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "entradas")
+@Table(name = "saidas")
 public class Saida {
 
     @Id
