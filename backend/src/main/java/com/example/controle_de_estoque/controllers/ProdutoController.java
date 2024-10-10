@@ -56,11 +56,11 @@ public class ProdutoController {
 
      if(optionalProduto.isPresent()) {
          Produto produtoExistente = optionalProduto.get();
-         produtoExistente.setNome(produtoDetalhes.getNome());
-         produtoExistente.setDescricao(produtoDetalhes.getDescricao());
-         produtoExistente.setPreco(produtoDetalhes.getPreco());
+         produtoExistente.setNome(produtoDetalhes.getNome() != null ? produtoDetalhes.getNome() : produtoExistente.getNome());
+         produtoExistente.setDescricao(produtoDetalhes.getDescricao() != null ? produtoDetalhes.getDescricao() : produtoExistente.getDescricao());
+         produtoExistente.setPreco(produtoDetalhes.getPreco() != null ? produtoDetalhes.getPreco() : produtoExistente.getPreco());
          produtoExistente.setQuantidade(produtoDetalhes.getQuantidade());
-         produtoExistente.setFlAtivo(produtoDetalhes.getFlAtivo());
+         produtoExistente.setFlAtivo(produtoDetalhes.getFlAtivo() != null ? produtoDetalhes.getFlAtivo() : produtoExistente.getFlAtivo());
 
          Optional<Categoria> optionalCategoria = categoriaRepository.findById(categoriaId);
 
