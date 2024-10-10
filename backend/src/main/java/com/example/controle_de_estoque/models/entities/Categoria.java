@@ -55,7 +55,7 @@ public class Categoria {
         this.descricao = descricao;
     }
 
-    public boolean isFlAtivo() {
+    public boolean getFlAtivo() {
         return flAtivo;
     }
 

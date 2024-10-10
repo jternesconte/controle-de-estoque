@@ -3,6 +3,7 @@ package com.example.controle_de_estoque.ws;
 
 import com.example.controle_de_estoque.controllers.CategoriaController;
 import com.example.controle_de_estoque.models.entities.Categoria;
+import com.example.controle_de_estoque.models.entities.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,16 @@ public class CategoriaWs {
     @GetMapping("/getAllCategorias")
     public @ResponseBody List<Categoria> getAllCategorias() {
         return categoriaController.getAllCategorias();
+    }
+
+    @GetMapping("/getCategorias/ativos")
+    public @ResponseBody List<Categoria> getAtivos() {
+        return categoriaController.getAtivos();
+    }
+
+    @GetMapping("/getCategorias/inativos")
+    public @ResponseBody List<Categoria> getInativos() {
+        return categoriaController.getInativos();
     }
 
     @PostMapping("/adicionarCategoria")

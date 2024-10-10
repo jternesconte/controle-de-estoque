@@ -3,6 +3,7 @@ package com.example.controle_de_estoque.controllers;
 import com.example.controle_de_estoque.models.entities.Categoria;
 import com.example.controle_de_estoque.models.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -16,6 +17,16 @@ public class CategoriaController {
 
     public List<Categoria> getAllCategorias() {
         return (List<Categoria>) categoriaRepository.findAll();
+    }
+
+    public List<Categoria> getAtivos() {
+        List<Categoria> categoriasAtivas = categoriaRepository.findByflAtivoTrue();
+        return ResponseEntity.ok(categoriasAtivas).getBody();
+    }
+
+    public List<Categoria> getInativos() {
+        List<Categoria> categoriasInativas = categoriaRepository.findByflAtivoFalse();
+        return ResponseEntity.ok(categoriasInativas).getBody();
     }
 
     public Categoria novaCategoria(Categoria categoriaDetalhes) {
