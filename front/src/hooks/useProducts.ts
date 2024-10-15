@@ -10,6 +10,8 @@ export const useProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
+  const [openEditDialogEntrada, setOpenEditDialogEntrada] = useState(false);
+
   const { toast } = useToast();
 
   const fetchProducts = useCallback(async () => {
@@ -70,6 +72,7 @@ export const useProducts = () => {
           nome: product.nome,
           descricao: product.descricao,
           flAtivo: product.flAtivo,
+          preco: product.preco,
           // Adicione outros campos que precisam ser atualizados
         }),
       });
@@ -138,5 +141,7 @@ export const useProducts = () => {
     selectedProduct,
     setSelectedProduct,
     refreshProducts: fetchProducts,
+    openEditDialogEntrada,
+    setOpenEditDialogEntrada,
   };
 };
