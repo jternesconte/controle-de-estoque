@@ -7,14 +7,15 @@ export interface Product {
   preco: number;
   quantidade: number;
   categoriaId: Category;
-  flAtivo: "S" | "N";
+  flAtivo: boolean;
 }
 
 export interface NewProduct {
   nome: string;
   descricao: string;
+  // categoria_id: Category;
   categoria_id: number;
   preco: number;
   quantidade: number;
-  flAtivo: "S" | "N";
+  flAtivo?: boolean;
 }
