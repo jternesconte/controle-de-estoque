@@ -12,6 +12,7 @@ import { Switch } from "../ui/switch";
 import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 import { Input } from "../ui/input"
+import { Product } from "@/types/product";
 
 
 export function TableProducts() {
@@ -25,6 +26,16 @@ export function TableProducts() {
     if (selectedProduct) {
       editProduct(selectedProduct);
       setOpenEditDialog(false);
+    }
+  };
+
+  const toggleProductActiveStatus = async (product: Product) => {
+    const updatedProduct = { ...product, flAtivo: !product.flAtivo }; // Inverte o estado de flAtivo
+
+    try {
+      await editProduct(updatedProduct); // Chama a função editProduct existente
+    } catch (error) {
+      console.error("Erro ao alternar o estado de flAtivo:", error);
     }
   };
 
@@ -52,7 +63,7 @@ export function TableProducts() {
               <TableCell className="text-center translate-x-5">{product.quantidade}</TableCell>
               <TableCell className="text-right">R$ {product.preco}</TableCell>
               <TableCell className="text-center translate-x-7">
-                <Switch checked={product.flAtivo === "S"} />
+                <Switch checked={product.flAtivo} onCheckedChange={() => toggleProductActiveStatus(product)} />
               </TableCell>
               <TableCell className="text-right">
                 <button onClick={() => handleEditProduct(product)}>
