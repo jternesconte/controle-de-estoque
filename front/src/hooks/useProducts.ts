@@ -69,6 +69,7 @@ export const useProducts = () => {
         body: JSON.stringify({
           nome: product.nome,
           descricao: product.descricao,
+          flAtivo: product.flAtivo,
           // Adicione outros campos que precisam ser atualizados
         }),
       });
