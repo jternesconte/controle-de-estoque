@@ -7,30 +7,39 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CreateProduct } from "../createProduct/createProduct"
-import { useProducts } from "@/hooks/use-product";
+import { useProducts } from "@/hooks/useProducts";
+import { Switch } from "../ui/switch";
+import { Button } from "../ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
+import { Input } from "../ui/input"
+
 
 export function TableProducts() {
-  const { products, loading, error, deleteProduct } = useProducts();
+  const { products, loadingProducts, errorProducts, handleEditProduct, openEditDialog, setOpenEditDialog, selectedProduct, setSelectedProduct, editProduct } = useProducts();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loadingProducts) return <p>Loading...</p>;
+  if (errorProducts) return <p>Error: {errorProducts}</p>;
+
+  const handleSubmitProductEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedProduct) {
+      editProduct(selectedProduct);
+      setOpenEditDialog(false);
+    }
+  };
 
   return (
-    <section className="max-w-6xl m-auto py-10">
-      <div className="flex justify-between">
-        <CreateProduct />
-        <a href="/categories" className="underline font-medium">Categorias</a>
-      </div>
+    <>
       <Table className="overflow-hidden">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[250px]">Name</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Category</TableHead>
+            <TableHead className="w-[250px]">Nome</TableHead>
+            <TableHead>Descrição</TableHead>
+            <TableHead>Categoria</TableHead>
             <TableHead className="text-right">Quantidade</TableHead>
-            <TableHead className="text-right">Price</TableHead>
-            <TableHead className="text-right">Actions</TableHead> {/* Adicionando coluna de ações */}
+            <TableHead className="text-right">Preço</TableHead>
+            <TableHead className="text-right">Desativo/Ativo</TableHead>
+            <TableHead className="text-right">Editar</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -38,22 +47,66 @@ export function TableProducts() {
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.nome}</TableCell>
               <TableCell>{product.descricao}</TableCell>
-              <TableCell>{product.categoria}</TableCell>
-              <TableCell className="text-center">{product.quantidade}</TableCell>
+              <TableCell>{product.categoriaId.nome}</TableCell>
+
+              <TableCell className="text-center translate-x-5">{product.quantidade}</TableCell>
               <TableCell className="text-right">R$ {product.preco}</TableCell>
+              <TableCell className="text-center translate-x-7">
+                <Switch checked={product.flAtivo === "S"} />
+              </TableCell>
               <TableCell className="text-right">
-                <button onClick={() => deleteProduct(product.id)}>Delete</button> {/* Botão de deletar */}
+                <button onClick={() => handleEditProduct(product)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                </button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
         <TableFooter>
-          {/* <TableRow>
-            <TableCell colSpan={4}>Total</TableCell>
-            <TableCell className="text-right">${products.reduce((acc, product) => acc + product.price, 0).toFixed(2)}</TableCell>
-          </TableRow> */}
         </TableFooter>
       </Table>
-    </section>
+
+
+      <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Categoria</DialogTitle>
+          </DialogHeader>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmitProductEdit}>
+            <div>
+              <label htmlFor="">nome</label>
+              <Input
+                type="text"
+                placeholder="nome"
+                value={selectedProduct?.nome}
+                onChange={(e) => setSelectedProduct({ ...selectedProduct, nome: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="">descrição</label>
+              <Input
+                type="text"
+                placeholder="descrição"
+                value={selectedProduct?.descricao}
+                onChange={(e) => setSelectedProduct({ ...selectedProduct, descricao: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="">Preço</label>
+              <Input
+                type="number"
+                placeholder="quantidade"
+                value={selectedProduct?.preco}
+                onChange={(e) => setSelectedProduct({ ...selectedProduct, preco: e.target.value })}
+                required
+              />
+            </div>
+            <Button type="submit">Salvar Alterações</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
