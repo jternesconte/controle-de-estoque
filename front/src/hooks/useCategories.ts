@@ -46,6 +46,7 @@ export const useCategories = () => {
       setErrorCategories(err.message);
       toast({
         title: "Erro ao criar a categoria.",
+        variant: "destructive",
       });
     }
   };
