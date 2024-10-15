@@ -15,12 +15,9 @@ import { useCategories } from "@/hooks/useCategories";
 export const CreateProduct = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  // const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [price, setPrice] = useState("");
-  // const [price, setPrice] = useState<number>(0);
-  const [quantity, setQuantity] = useState<number>(0);
-
+  const [quantity, setQuantity] = useState("");
 
   const { addProduct, dialogOpenProducts, setDialogOpenProducts } = useProducts();
   const { categories } = useCategories();
@@ -35,9 +32,8 @@ export const CreateProduct = () => {
         nome: name,
         descricao: description,
         preco: Number(price),
-        quantidade: quantity,
-        categoria_id,
-        fl_ativo: "S"
+        quantidade: Number(quantity),
+        categoria_id
       },
       Number(selectedCategoryId)
     );
@@ -46,8 +42,8 @@ export const CreateProduct = () => {
     setName('');
     setDescription('');
     setPrice('');
-    setQuantity(0);
-    setSelectedCategoryId("");
+    setQuantity('');
+    setSelectedCategoryId('');
   };
 
   return (
@@ -88,7 +84,7 @@ export const CreateProduct = () => {
           />
           <label htmlFor="">quantidade</label>
           <Input
-            type="number"
+            type="text"
             placeholder="Quantidade"
             value={quantity}
             onChange={(e) => setQuantity(Number(e.target.value))}
@@ -97,26 +93,11 @@ export const CreateProduct = () => {
           />
 
           <label htmlFor="">categoria</label>
-          {/* <Select
-
-            required
-          >
-            <SelectTrigger >
-              <SelectValue placeholder="Categoria" value={selectedCategoryId}
-                onChange={(e) => setSelectedCategoryId(e.target.value)} />
-            </SelectTrigger>
-            <SelectContent>
-              {category.map((category) => (
-                <SelectItem key={category.id} value={(category.id).toString()}>
-                  {category.nome}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
           <select
             value={selectedCategoryId}
             onChange={(e) => setSelectedCategoryId((e.target.value))}
             required
+            className="w-full p-[6px] border-[1.5px] border-[#e2e2e2f2] rounded-md"
           >
             <option value="">Selecione uma categoria</option>
             {categories.map((category) => (
