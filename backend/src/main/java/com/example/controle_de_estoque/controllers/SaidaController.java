@@ -36,7 +36,7 @@ public class SaidaController {
 
         int novaQuantidade = produto.getQuantidade() - saidaDetalhes.getQuantidade();
 
-        if(novaQuantidade > 0) {
+        if(novaQuantidade >= 0) {
         produto.setQuantidade(novaQuantidade);
         produto.setNome(produto.getNome());
         produto.setDescricao(produto.getDescricao());
