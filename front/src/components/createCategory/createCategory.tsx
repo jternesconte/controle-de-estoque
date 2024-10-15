@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button"
 import { useState } from "react";
-import { useCategories, useProducts } from "@/hooks/useCategories";
+import { useCategories } from "@/hooks/useCategories";
 import { Input } from "../ui/input";
 
 export const CreateCategory = () => {
@@ -20,15 +20,12 @@ export const CreateCategory = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Chamando a função do hook para adicionar o produto
     await addCategory(
       {
         nome: name,
-        descricao: description,
-        fl_ativo: "S"
+        descricao: description
       }
     );
-
     setName('');
     setDescription('');
   };
