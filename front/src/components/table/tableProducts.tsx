@@ -13,13 +13,17 @@ import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 import { Input } from "../ui/input"
 import { Product } from "@/types/product";
+import { useState } from "react";
+import EntradaSaidaModal from "../entradaEsaida/entradaSaida";
 
 
 export function TableProducts() {
-  const { products, loadingProducts, errorProducts, handleEditProduct, openEditDialog, setOpenEditDialog, selectedProduct, setSelectedProduct, editProduct } = useProducts();
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
-  if (loadingProducts) return <p>Loading...</p>;
-  if (errorProducts) return <p>Error: {errorProducts}</p>;
+  const { products, loadingProducts, errorProducts, handleEditProduct, openEditDialog, setOpenEditDialog, selectedProduct, setSelectedProduct, editProduct } = useProducts()
+
+  if (loadingProducts) return <p>Carregando...</p>;
+  if (errorProducts) return <p>Erro: ocorreu algum erro ao carregar os produtos. ({errorProducts})</p>;
 
   const handleSubmitProductEdit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,10 +49,11 @@ export function TableProducts() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[250px]">Nome</TableHead>
-            <TableHead>Descrição</TableHead>
+            {/* <TableHead>Descrição</TableHead> */}
             <TableHead>Categoria</TableHead>
             <TableHead className="text-right">Quantidade</TableHead>
             <TableHead className="text-right">Preço</TableHead>
+            <TableHead className="text-right">Entrada/Saida</TableHead>
             <TableHead className="text-right">Desativo/Ativo</TableHead>
             <TableHead className="text-right">Editar</TableHead>
           </TableRow>
@@ -57,17 +62,23 @@ export function TableProducts() {
           {products.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.nome}</TableCell>
-              <TableCell>{product.descricao}</TableCell>
+              {/* <TableCell>{product.descricao}</TableCell> */}
               <TableCell>{product.categoriaId.nome}</TableCell>
 
               <TableCell className="text-center translate-x-5">{product.quantidade}</TableCell>
               <TableCell className="text-right">R$ {product.preco}</TableCell>
+
               <TableCell className="text-center translate-x-7">
                 <Switch checked={product.flAtivo} onCheckedChange={() => toggleProductActiveStatus(product)} />
               </TableCell>
+
+              <TableCell className="text-right">
+                <EntradaSaidaModal product={product} />
+              </TableCell>
+
               <TableCell className="text-right">
                 <button onClick={() => handleEditProduct(product)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                 </button>
               </TableCell>
             </TableRow>
@@ -77,11 +88,10 @@ export function TableProducts() {
         </TableFooter>
       </Table>
 
-
       <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Editar Categoria</DialogTitle>
+            <DialogTitle>Editar Produto</DialogTitle>
           </DialogHeader>
           <form className="flex flex-col gap-4" onSubmit={handleSubmitProductEdit}>
             <div>

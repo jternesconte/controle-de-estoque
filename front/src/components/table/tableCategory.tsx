@@ -13,8 +13,8 @@ import { useCategories } from "@/hooks/useCategories";
 export function TableCategory() {
   const { categories, loadingCategories, errorCategories } = useCategories();
 
-  if (loadingCategories) return <p>Loading...</p>;
-  if (errorCategories) return <p>Error: {errorCategories}</p>;
+  if (loadingCategories) return <p>Carregando...</p>;
+  if (errorCategories) return <p>Erro: ocorreu algum erro ao carregar as categorias.({errorCategories})</p>;
 
   return (
     <Table className="overflow-hidden">
@@ -31,7 +31,7 @@ export function TableCategory() {
             <TableCell className="font-medium">{category.nome}</TableCell>
             <TableCell>{category.descricao}</TableCell>
             <TableCell className="text-right -translate-x-6">
-              <Switch checked={category.fl_ativo === "S"} />
+              <Switch checked={category.fl_ativo} />
             </TableCell>
           </TableRow>
         ))}
