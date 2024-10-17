@@ -36,8 +36,8 @@ public class CategoriaWs {
         return categoriaController.novaCategoria(categoriaDetalhes);
     }
 
-    @PutMapping("/alterarCategoria/{id}/{flAtivo}")
-    public Categoria editarCategoria(@PathVariable int id, @PathVariable boolean flAtivo) {
-        return  categoriaController.editarCategoria(id, flAtivo);
+    @PutMapping("/alterarCategoria/{id}")
+    public Categoria editarCategoria(@PathVariable int id, @RequestBody Categoria categoriaDetalhes) {
+        return  categoriaController.editarCategoria(id, categoriaDetalhes);
     }
 }

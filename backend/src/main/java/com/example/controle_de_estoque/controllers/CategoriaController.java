@@ -40,14 +40,14 @@ public class CategoriaController {
         return categoriaRepository.save(categoria);
     }
 
-    public Categoria editarCategoria(int id, boolean flAtivo) {
+    public Categoria editarCategoria(int id, Categoria categoriaDetalhes) {
         Optional<Categoria> optionalCategoria =  categoriaRepository.findById(id);
 
         if(optionalCategoria.isPresent()) {
             Categoria categoriaExistente = optionalCategoria.get();
             categoriaExistente.setNome(categoriaExistente.getNome());
             categoriaExistente.setDescricao(categoriaExistente.getDescricao());
-            categoriaExistente.setFlAtivo(flAtivo);
+            categoriaExistente.setFlAtivo(categoriaDetalhes.getFlAtivo());
 
             return categoriaRepository.save(categoriaExistente);
         } else {
