@@ -2,6 +2,8 @@ package com.example.controle_de_estoque.models.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "entradas")
 public class Entrada {
@@ -16,6 +18,9 @@ public class Entrada {
 
     @Column(name = "quantidade", nullable = false)
     private int quantidade;
+
+    @Column(name = "data_entrada", insertable = false, updatable = false)
+    private LocalDateTime dataEntrada;
 
     public Entrada() {
 
@@ -49,4 +54,6 @@ public class Entrada {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+
+    public LocalDateTime getDataEntrada() { return dataEntrada; }
 }
