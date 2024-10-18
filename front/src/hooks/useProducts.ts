@@ -10,8 +10,6 @@ export const useProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
-  const [openEditDialogEntrada, setOpenEditDialogEntrada] = useState(false);
-
   const { toast } = useToast();
 
   const fetchProducts = useCallback(async () => {
@@ -22,7 +20,9 @@ export const useProducts = () => {
         throw new Error("Error fetching products");
       }
       const data: Product[] = await response.json();
-      setProducts(data);
+      // Ordena os produtos por um campo específico, como id
+      const sortedProducts = data.sort((a, b) => a.id - b.id);
+      setProducts(sortedProducts);
     } catch (err: any) {
       setErrorProducts(err.message);
       toast({
@@ -73,7 +73,6 @@ export const useProducts = () => {
           descricao: product.descricao,
           flAtivo: product.flAtivo,
           preco: product.preco,
-          // Adicione outros campos que precisam ser atualizados
         }),
       });
       if (!response.ok) {
@@ -94,32 +93,26 @@ export const useProducts = () => {
     }
   };
 
-  const deleteProduct = async (id: number) => {
-    try {
-      const response = await fetch(`http://127.0.0.1:8080/api/produto/delete/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Error deleting product");
-      }
-      setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
-      toast({
-        title: "Produto deletado com sucesso.",
-      });
-    } catch (err: any) {
-      setErrorProducts(err.message);
-      toast({
-        title: "Erro ao deletar o produto.",
-        description: err.message,
-        variant: "destructive",
-      });
-    }
-  };
-
   const handleEditProduct = (product: Product) => {
     setSelectedProduct(product);
-    console.log(product);
     setOpenEditDialog(true);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const formattedDate = new Intl.DateTimeFormat("pt-BR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(date);
+
+    const formattedTime = new Intl.DateTimeFormat("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(date);
+
+    return `${formattedDate} - ${formattedTime}`;
   };
 
   useEffect(() => {
@@ -132,16 +125,14 @@ export const useProducts = () => {
     errorProducts,
     addProduct,
     editProduct,
-    deleteProduct,
     dialogOpenProducts,
     setDialogOpenProducts,
     handleEditProduct,
     openEditDialog,
+    formatDate,
     setOpenEditDialog,
     selectedProduct,
     setSelectedProduct,
     refreshProducts: fetchProducts,
-    openEditDialogEntrada,
-    setOpenEditDialogEntrada,
   };
 };
