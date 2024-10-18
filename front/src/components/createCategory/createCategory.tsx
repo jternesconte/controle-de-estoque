@@ -28,6 +28,7 @@ export const CreateCategory = () => {
     );
     setName('');
     setDescription('');
+    setDialogOpenCategories(false)
   };
 
   return (
