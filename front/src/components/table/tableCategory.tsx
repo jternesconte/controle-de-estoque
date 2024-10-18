@@ -9,12 +9,24 @@ import {
 } from "@/components/ui/table"
 import { Switch } from "../ui/switch";
 import { useCategories } from "@/hooks/useCategories";
+import { Category } from "@/types/category";
 
 export function TableCategory() {
-  const { categories, loadingCategories, errorCategories } = useCategories();
+  const { categories, loadingCategories, errorCategories, editCategory } = useCategories();
 
   if (loadingCategories) return <p>Carregando...</p>;
   if (errorCategories) return <p>Erro: ocorreu algum erro ao carregar as categorias.({errorCategories})</p>;
+
+
+  const toggleCategoryActiveStatus = async (category: Category) => {
+    const updatedProduct = { ...category, flAtivo: !category.flAtivo }; // Inverte o estado de flAtivo
+
+    try {
+      await editCategory(updatedProduct); // Chama a função editProduct existente
+    } catch (error) {
+      console.error("Erro ao alternar o estado de flAtivo:", error);
+    }
+  };
 
   return (
     <Table className="overflow-hidden">
@@ -31,7 +43,7 @@ export function TableCategory() {
             <TableCell className="font-medium">{category.nome}</TableCell>
             <TableCell>{category.descricao}</TableCell>
             <TableCell className="text-right -translate-x-6">
-              <Switch checked={category.fl_ativo} />
+              <Switch checked={category.flAtivo} onCheckedChange={() => toggleCategoryActiveStatus(category)} />
             </TableCell>
           </TableRow>
         ))}
