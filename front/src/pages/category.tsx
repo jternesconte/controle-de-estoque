@@ -5,8 +5,8 @@ import { Link } from "react-router-dom"
 
 export const Category = () => {
   return (
-    <main className="max-w-7xl m-auto py-10">
-      <div className="flex justify-between mb-4">
+    <main className="container-full">
+      <div className="flex justify-between">
         <CreateCategory />
         <Link to="/products" className="underline font-medium">Produtos</Link>
       </div>
