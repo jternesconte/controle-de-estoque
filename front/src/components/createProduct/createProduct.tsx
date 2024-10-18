@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useProducts } from "@/hooks/useProducts";
 import { Input } from "../ui/input";
 import { useCategories } from "@/hooks/useCategories";
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 export const CreateProduct = () => {
   const [name, setName] = useState('');
@@ -49,7 +48,7 @@ export const CreateProduct = () => {
   return (
     <Dialog open={dialogOpenProducts} onOpenChange={setDialogOpenProducts}>
       <DialogTrigger>
-        <Button className="mb-5">Adicionar produto</Button>
+        <Button>Adicionar produto</Button>
       </DialogTrigger>
 
       <DialogContent>
