@@ -51,6 +51,34 @@ export const useCategories = () => {
     }
   };
 
+  const editCategory = async (category: Category) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8080/api/categoria/alterarCategoria/${category.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          flAtivo: category.flAtivo,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Error editing product");
+      }
+      const updatedProduct: Category = await response.json();
+      setCategories((prevCategories) => prevCategories.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)));
+      toast({
+        title: "Categproa editada com sucesso.",
+      });
+    } catch (err: any) {
+      toast({
+        title: "Ocorreu algum erro ao editar a categoria.",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -58,6 +86,7 @@ export const useCategories = () => {
   return {
     categories,
     loadingCategories,
+    editCategory,
     errorCategories,
     addCategory,
   };
