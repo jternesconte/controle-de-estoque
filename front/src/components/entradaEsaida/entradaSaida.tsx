@@ -10,7 +10,7 @@ const EntradaSaidaModal = ({ product, onClose }: { product: Product, onClose: ()
   const [entrada, setEntrada] = useState<string>('');
   const [saida, setSaida] = useState<string>('');
 
-  const handleSubmit = async () => {
+  const handleSubmitEntryandExit = async () => {
     try {
       let response;
       if (entrada !== '') {
@@ -51,13 +51,11 @@ const EntradaSaidaModal = ({ product, onClose }: { product: Product, onClose: ()
 
   const handleEntradaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Retém apenas os dígitos
     setEntrada(value.replace(/\D/g, ''));
   };
 
   const handleSaidaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Retém apenas os dígitos
     setSaida(value.replace(/\D/g, ''));
   };
 
@@ -86,7 +84,7 @@ const EntradaSaidaModal = ({ product, onClose }: { product: Product, onClose: ()
             onChange={handleSaidaChange}
             disabled={entrada != ''}
           />
-          <Button onClick={handleSubmit}>Confirmar</Button>
+          <Button onClick={handleSubmitEntryandExit}>Confirmar</Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -13,7 +13,6 @@ import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 import { Input } from "../ui/input"
 import { Product } from "@/types/product";
-// import EntradaSaidaModal from "../entradaEsaida/entradaSaida";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 
@@ -23,15 +22,15 @@ export function TableProducts() {
   const [saida, setSaida] = useState<string>('');
   const [openEditDialogStock, setOpenEditDialogStock] = useState(false);
 
-  const { products, loadingProducts, errorProducts, handleEditProduct, openEditDialog, setOpenEditDialog, selectedProduct, setSelectedProduct, editProduct } = useProducts()
+  const { products, refreshProducts, loadingProducts, errorProducts, handleEditProduct, openEditDialog, setOpenEditDialog, selectedProduct, setSelectedProduct, editProduct } = useProducts()
 
   if (loadingProducts) return <p>Carregando...</p>;
   if (errorProducts) return <p>Erro: ocorreu algum erro ao carregar os produtos. ({errorProducts})</p>;
 
-  const handleSubmitProductEdit = (e: React.FormEvent) => {
+  const handleSubmitProductEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedProduct) {
-      editProduct(selectedProduct);
+      await editProduct(selectedProduct);
       setOpenEditDialog(false);
     }
   };
@@ -48,7 +47,7 @@ export function TableProducts() {
 
   // ENTRADA / SAIDA
 
-  const handleSubmit = async () => {
+  const handleSubmitEntryAndExit = async () => {
     if (selectedProduct) {
       try {
         let response;
@@ -61,6 +60,7 @@ export function TableProducts() {
             body: JSON.stringify({ quantidade: entrada }),
 
           });
+
           setEntrada('')
         } else if (saida !== '') {
           response = await fetch(`http://127.0.0.1:8080/api/saida/novaSaida/${selectedProduct.id}`, {
@@ -88,6 +88,7 @@ export function TableProducts() {
         });
       }
     }
+    refreshProducts()
   };
 
   const handleEntradaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,16 +103,16 @@ export function TableProducts() {
     setSaida(value.replace(/\D/g, ''));
   };
 
+  const openStockModal = (product: Product) => {
+    setSelectedProduct(product);
+    setOpenEditDialogStock(true)
+  };
+
   const handlePrecoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Retém apenas os dígitos e um único ponto decimal
     const numericValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
     setSelectedProduct({ ...selectedProduct, preco: numericValue });
-  };
-
-  const openStockModal = (product: Product) => {
-    setSelectedProduct(product);
-    setOpenEditDialogStock(true)
   };
 
   return (
@@ -157,13 +158,9 @@ export function TableProducts() {
         </TableFooter>
       </Table>
 
-      {/* {selectedProduct && (
-        <EntradaSaidaModal product={selectedProduct} onClose={closeModal} />
-      )} */}
-
+      {/* MODAL ENTRA E SAIDA */}
       <Dialog open={openEditDialogStock} onOpenChange={setOpenEditDialogStock}>
-
-        <DialogContent className="">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Entrada e Saida</DialogTitle>
           </DialogHeader>
@@ -189,11 +186,12 @@ export function TableProducts() {
               disabled={entrada != ''}
             />
 
-            <Button onClick={handleSubmit}>Confirmar</Button>
+            <Button onClick={handleSubmitEntryAndExit}>Confirmar</Button>
           </div>
         </DialogContent>
       </Dialog>
 
+      {/* MODAL EDIT PRODUTC */}
       <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog} >
         <DialogContent>
           <DialogHeader>
@@ -237,3 +235,4 @@ export function TableProducts() {
     </>
   )
 }
+

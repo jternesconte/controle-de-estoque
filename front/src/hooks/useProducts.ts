@@ -12,7 +12,7 @@ export const useProducts = () => {
 
   const { toast } = useToast();
 
-  const fetchProducts = useCallback(async () => {
+  const fetchProducts = async () => {
     setLoadingProducts(true);
     try {
       const response = await fetch(`http://127.0.0.1:8080/api/produto/getAllProdutos`);
@@ -33,7 +33,7 @@ export const useProducts = () => {
     } finally {
       setLoadingProducts(false);
     }
-  }, [toast]);
+  };
 
   const addProduct = async (newProduct: NewProduct, categoriaId: number) => {
     try {
@@ -117,7 +117,7 @@ export const useProducts = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+  }, []);
 
   return {
     products,
