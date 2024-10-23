@@ -18,7 +18,8 @@ export const useCategories = () => {
         throw new Error("Error fetching categories");
       }
       const data: Category[] = await response.json();
-      setCategories(data);
+      const sortedCategories = data.sort((a, b) => a.id - b.id); // Ordena por ID
+      setCategories(sortedCategories);
     } catch (err: any) {
       setErrorCategories(err.message);
     } finally {
@@ -65,11 +66,10 @@ export const useCategories = () => {
       if (!response.ok) {
         throw new Error("Error editing product");
       }
-      const updatedProduct: Category = await response.json();
-      setCategories((prevCategories) => prevCategories.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)));
       toast({
-        title: "Categproa editada com sucesso.",
+        title: "Categoria editada com sucesso.",
       });
+      fetchCategories();
     } catch (err: any) {
       toast({
         title: "Ocorreu algum erro ao editar a categoria.",
@@ -84,6 +84,7 @@ export const useCategories = () => {
   }, []);
 
   return {
+    fetchCategories,
     categories,
     loadingCategories,
     editCategory,
