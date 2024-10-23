@@ -52,28 +52,28 @@ public class ProdutoController {
     }
 
     public Produto editarProduto(int id, Produto produtoDetalhes, int categoriaId) {
-     Optional<Produto> optionalProduto = produtoRepository.findById(id);
+        Optional<Produto> optionalProduto = produtoRepository.findById(id);
 
-     if(optionalProduto.isPresent()) {
-         Produto produtoExistente = optionalProduto.get();
-         produtoExistente.setNome(produtoDetalhes.getNome() != null ? produtoDetalhes.getNome() : produtoExistente.getNome());
-         produtoExistente.setDescricao(produtoDetalhes.getDescricao() != null ? produtoDetalhes.getDescricao() : produtoExistente.getDescricao());
-         produtoExistente.setPreco(produtoDetalhes.getPreco() != null ? produtoDetalhes.getPreco() : produtoExistente.getPreco());
-         produtoExistente.setQuantidade(produtoExistente.getQuantidade());
-         produtoExistente.setFlAtivo(produtoDetalhes.getFlAtivo() != null ? produtoDetalhes.getFlAtivo() : produtoExistente.getFlAtivo());
+        if(optionalProduto.isPresent()) {
+            Produto produtoExistente = optionalProduto.get();
+            produtoExistente.setNome(produtoDetalhes.getNome() != null ? produtoDetalhes.getNome() : produtoExistente.getNome());
+            produtoExistente.setDescricao(produtoDetalhes.getDescricao() != null ? produtoDetalhes.getDescricao() : produtoExistente.getDescricao());
+            produtoExistente.setPreco(produtoDetalhes.getPreco() != null ? produtoDetalhes.getPreco() : produtoExistente.getPreco());
+            produtoExistente.setQuantidade(produtoExistente.getQuantidade());
+            produtoExistente.setFlAtivo(produtoDetalhes.getFlAtivo() != null ? produtoDetalhes.getFlAtivo() : produtoExistente.getFlAtivo());
 
-         Optional<Categoria> optionalCategoria = categoriaRepository.findById(categoriaId);
+            Optional<Categoria> optionalCategoria = categoriaRepository.findById(categoriaId);
 
-         if(optionalCategoria.isPresent()) {
+            if(optionalCategoria.isPresent()) {
              produtoExistente.setCategoriaId(optionalCategoria.get());
-         } else {
-             throw new RuntimeException("Categoria não encontrada com o id: " + produtoDetalhes.getCategoriaId());
-         }
+            } else {
+             throw new RuntimeException("Categoria não encontrada com o id: " + categoriaId);
+            }
 
-         return produtoRepository.save(produtoExistente);
-     } else {
-         throw new RuntimeException("Produto não encontrado com o id: " + id);
-     }
+            return produtoRepository.save(produtoExistente);
+        } else {
+            throw new RuntimeException("Produto não encontrado com o id: " + id);
+        }
 
     }
 }
