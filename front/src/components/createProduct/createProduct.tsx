@@ -45,6 +45,18 @@ export const CreateProduct = () => {
     setSelectedCategoryId('');
   };
 
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const numericValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    setQuantity(numericValue);
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const numericValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    setPrice(numericValue);
+  };
+
   return (
     <Dialog open={dialogOpenProducts} onOpenChange={setDialogOpenProducts}>
       <DialogTrigger>
@@ -76,7 +88,7 @@ export const CreateProduct = () => {
             type="text"
             placeholder="Preço"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={handlePriceChange}
             inputMode="numeric"
             pattern="[0-9]*"
             required
@@ -86,7 +98,7 @@ export const CreateProduct = () => {
             type="text"
             placeholder="Quantidade"
             value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
+            onChange={handleQuantityChange}
             inputMode="numeric"
             required
           />
