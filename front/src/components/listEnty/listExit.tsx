@@ -57,7 +57,7 @@ export const ListExit = () => {
         <Button>Saídas</Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl min-h-72">
         <DialogHeader>
           <DialogTitle>Lista de Saídas</DialogTitle>
         </DialogHeader>
@@ -67,7 +67,7 @@ export const ListExit = () => {
             <div className="loader">Loading...</div>
           </div>
         ) : errorExit ? (
-          <div className="text-red-500 text-center">{errorExit}</div>
+          <div className="text-red-500 text-center">Ocorreu algum erro ({errorExit})</div>
         ) : (
           <>
             <Table>

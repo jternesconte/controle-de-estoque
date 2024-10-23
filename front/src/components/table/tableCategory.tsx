@@ -10,6 +10,7 @@ import {
 import { Switch } from "../ui/switch";
 import { useCategories } from "@/hooks/useCategories";
 import { Category } from "@/types/category";
+import { toast } from "@/hooks/use-toast";
 
 export function TableCategory() {
   const { categories, loadingCategories, errorCategories, editCategory } = useCategories();
@@ -19,12 +20,17 @@ export function TableCategory() {
 
 
   const toggleCategoryActiveStatus = async (category: Category) => {
-    const updatedProduct = { ...category, flAtivo: !category.flAtivo }; // Inverte o estado de flAtivo
+    const updatedProduct = { ...category, flAtivo: !category.flAtivo };
 
     try {
-      await editCategory(updatedProduct); // Chama a função editProduct existente
-    } catch (error) {
+      await editCategory(updatedProduct);
+    } catch (error: any) {
       console.error("Erro ao alternar o estado de flAtivo:", error);
+      toast({
+        title: "Erro ao atualizar a categoria.",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
