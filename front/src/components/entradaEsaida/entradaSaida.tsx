@@ -42,7 +42,6 @@ const EntradaSaidaModal = ({ product, onClose }: { product: Product, onClose: ()
 
       onClose();
     } catch (error: any) {
-      console.error('Erro:', error.message);
       toast({
         title: error.message,
       });
