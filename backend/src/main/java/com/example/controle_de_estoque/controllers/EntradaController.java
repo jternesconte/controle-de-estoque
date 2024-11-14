@@ -24,7 +24,7 @@ public class EntradaController {
 
     public Entrada novaEntrada(int produtoId, Entrada entradaDetalhes) {
         Produto produto = produtoRepository.findById(produtoId)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));;
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         if (produto.getCategoriaId() == null) {
             throw new RuntimeException("Produto não possui uma categoria associada");
