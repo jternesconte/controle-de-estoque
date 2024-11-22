@@ -14,18 +14,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 import { Input } from "../ui/input"
 import { Product } from "@/types/product";
 import { toast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { memo, useState } from "react";
 
-
-export function TableProducts() {
+export const TableProducts = () => {
   const [entrada, setEntrada] = useState<string>('');
   const [saida, setSaida] = useState<string>('');
   const [openEditDialogStock, setOpenEditDialogStock] = useState(false);
 
-  const { products, refreshProducts, loadingProducts, errorProducts, handleEditProduct, openEditDialog, setOpenEditDialog, selectedProduct, setSelectedProduct, editProduct } = useProducts()
+  const { products, loadingProducts, errorProducts, handleEditProduct, openEditDialog, setOpenEditDialog, selectedProduct, setSelectedProduct, editProduct, fetchProducts } = useProducts()
+
+  console.log("Current products in table:", products);
 
   if (loadingProducts) return <p>Carregando...</p>;
   if (errorProducts) return <p>Erro: ocorreu algum erro ao carregar os produtos. ({errorProducts})</p>;
+
 
   const handleSubmitProductEdit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +50,7 @@ export function TableProducts() {
   // ENTRADA / SAIDA
 
   const handleSubmitEntryAndExit = async () => {
-    if (selectedProduct) {
+    if (selectedProduct?.flAtivo == true) {
       try {
         let response;
         if (entrada !== '') {
@@ -61,7 +63,6 @@ export function TableProducts() {
 
           });
 
-          setEntrada('')
         } else if (saida !== '') {
           response = await fetch(`http://127.0.0.1:8080/api/saida/novaSaida/${selectedProduct.id}`, {
             method: 'POST',
@@ -70,7 +71,6 @@ export function TableProducts() {
             },
             body: JSON.stringify({ quantidade: Number(saida) }),
           });
-          setSaida('')
         }
         if (response && !response.ok) {
           throw new Error('Erro ao processar a transação');
@@ -80,15 +80,25 @@ export function TableProducts() {
           title: entrada !== '' ? "Entrada realizada com sucesso." : "Retirada realizada com sucesso.",
         });
 
-        setOpenEditDialogStock(false)
+
       } catch (error: any) {
         console.error('Erro:', error.message);
         toast({
           title: error.message,
+          variant: "destructive"
         });
       }
+    } else {
+      toast({
+        title: "Erro a realizar a retirada ou saida",
+        description: "Não é possivel realizar essa ação com o produto desativado.",
+        variant: "destructive",
+      });
     }
-    refreshProducts()
+    setEntrada('')
+    setSaida('')
+    setOpenEditDialogStock(false)
+    fetchProducts()
   };
 
   const handleEntradaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +127,7 @@ export function TableProducts() {
 
   return (
     <>
-      <Table className="overflow-hidden">
+      <Table className="overflow-hidden my-4">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[250px]">Nome</TableHead>

@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
 import { useProducts } from "@/hooks/useProducts";
 import { Product } from "@/types/product";
+import { toast } from "@/hooks/use-toast";
 
 export const ListLowQuantity = () => {
   const [dialogOpenlowQuantity, setDialogOpenlowQuantity] = useState(false);

@@ -21,7 +21,6 @@ const EntradaSaidaModal = ({ product, onClose }: { product: Product, onClose: ()
           },
           body: JSON.stringify({ quantidade: entrada }),
         });
-
       } else if (saida !== '') {
         response = await fetch(`http://127.0.0.1:8080/api/saida/novaSaida/${product.id}`, {
           method: 'POST',
@@ -35,11 +34,11 @@ const EntradaSaidaModal = ({ product, onClose }: { product: Product, onClose: ()
       if (response && !response.ok) {
         throw new Error('Erro ao processar a transação');
       }
-
       toast({
-        title: entrada !== '' ? "Entrada realizada com sucesso." : "Retirada realizada com sucesso.",
+        title: entrada !== '' ? "Entrada realizada com sucesso." : "Saida realizada com sucesso.",
       });
 
+      window.location.reload();
       onClose();
     } catch (error: any) {
       toast({

@@ -34,7 +34,7 @@ export const CreateProduct = () => {
         quantidade: Number(quantity),
         categoria_id
       },
-      Number(selectedCategoryId)
+      categoria_id
     );
 
     setDialogOpenProducts(false);
@@ -43,6 +43,7 @@ export const CreateProduct = () => {
     setPrice('');
     setQuantity('');
     setSelectedCategoryId('');
+    window.location.reload();
   };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +64,7 @@ export const CreateProduct = () => {
         <Button>Adicionar produto</Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent aria-description="modal de criar produto">
         <DialogHeader>
           <DialogTitle>Criar produto</DialogTitle>
         </DialogHeader>
