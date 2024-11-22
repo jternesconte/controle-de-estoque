@@ -1,4 +1,3 @@
-// hooks/useCategories.ts
 import { useState, useEffect } from "react";
 import { useToast } from "./use-toast";
 import { Category, NewCategory } from "@/types/category";
@@ -39,7 +38,6 @@ export const useCategories = () => {
       if (!response.ok) {
         throw new Error("Error adding category");
       }
-      fetchCategories();
       toast({
         title: "Categoria criada com sucesso.",
       });
@@ -50,6 +48,7 @@ export const useCategories = () => {
         variant: "destructive",
       });
     }
+    fetchCategories();
   };
 
   const editCategory = async (category: Category) => {

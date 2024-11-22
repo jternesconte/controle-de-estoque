@@ -29,11 +29,12 @@ export const CreateCategory = () => {
     setName('');
     setDescription('');
     setDialogOpenCategories(false)
+    window.location.reload();
   };
 
   return (
     <Dialog open={dialogOpenCategories} onOpenChange={setDialogOpenCategories}>
-      <DialogTrigger className="mb-5">
+      <DialogTrigger>
         <Button>Adicionar categoria</Button>
       </DialogTrigger>
 

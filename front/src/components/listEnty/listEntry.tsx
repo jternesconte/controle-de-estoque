@@ -14,7 +14,7 @@ export const ListEntry = () => {
   const { formatDate } = useProducts();
 
   const fetchEntrys = async () => {
-    setLoadingEntrys(true)
+    setLoadingEntrys(true);
     setErrorEntrys(null);
     try {
       const response = await fetch(`http://127.0.0.1:8080/api/entrada/getAllEntradas`);
@@ -22,6 +22,10 @@ export const ListEntry = () => {
         throw new Error("Error fetching products");
       }
       const data = await response.json();
+
+      // Ordenar as entradas por data, da mais velha para a mais nova
+      data.sort((a: Entrada, b: Entrada) => new Date(a.dataEntrada).getTime() - new Date(b.dataEntrada).getTime());
+
       setEntrys(data);
     } catch (err: any) {
       setErrorEntrys(err.message);
@@ -134,35 +138,5 @@ export const ListEntry = () => {
         )}
       </DialogContent>
     </Dialog>
-    // <Dialog open={dialogOpenEntry} onOpenChange={setDialogOpenEntry}>
-    //   <DialogTrigger>
-    //     <Button>Entradas</Button>
-    //   </DialogTrigger>
-
-    //   <DialogContent className="max-w-3xl">
-    //     <DialogHeader>
-    //       <DialogTitle>Lista de entradas</DialogTitle>
-    //     </DialogHeader>
-
-    //     <Table>
-    //       <TableHeader>
-    //         <TableRow>
-    //           <TableHead className="w-[600px]">Nome</TableHead>
-    //           <TableHead className="text-center">Entrada</TableHead>
-    //           <TableHead className="text-center">data</TableHead>
-    //         </TableRow>
-    //       </TableHeader>
-    //       {entrys.map((entry) => (
-    //         <TableBody>
-    //           <TableRow>
-    //             <TableCell className="font-medium">{entry.produtoId.nome}</TableCell>
-    //             <TableCell className="text-center min-w-40">{entry.quantidade}</TableCell>
-    //             <TableCell className="text-center w-52">{formatDate(entry.dataEntrada)}</TableCell>
-    //           </TableRow>
-    //         </TableBody>
-    //       ))}
-    //     </Table>
-    //   </DialogContent>
-    // </Dialog>
   )
 }
