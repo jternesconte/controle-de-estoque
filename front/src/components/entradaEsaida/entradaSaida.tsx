@@ -38,7 +38,6 @@ const EntradaSaidaModal = ({ product, onClose }: { product: Product, onClose: ()
         title: entrada !== '' ? "Entrada realizada com sucesso." : "Saida realizada com sucesso.",
       });
 
-      window.location.reload();
       onClose();
     } catch (error: any) {
       toast({

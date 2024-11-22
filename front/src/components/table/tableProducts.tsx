@@ -99,6 +99,7 @@ export const TableProducts = () => {
     setSaida('')
     setOpenEditDialogStock(false)
     fetchProducts()
+    window.location.reload();
   };
 
   const handleEntradaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
